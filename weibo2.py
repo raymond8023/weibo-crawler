@@ -1129,9 +1129,33 @@ class Weibo(object):
         if on_downloaded:
             on_downloaded(weibo, comments)
 
+        # 增加了获取二级回复的内容（weibo只有两级）
+        for i in range(count):
+            if comments[i].get("comments"):
+                # 评论还有评论，需要调去二级接口
+                params = {"cid": comments[i]['id']}
+                url = "https://m.weibo.cn/comments/hotFlowChild?max_id=0&max_id_type=0"
+                req = requests.get(
+                    url,
+                    params=params,
+                    headers=self.headers,
+                )
+                json = None
+                try:
+                    json = req.json()
+                except Exception as e:
+                    return
+                recomments = json.get("data")
+                if not recomments:
+                    return
+                if on_downloaded:
+                    on_downloaded(weibo, recomments)
+        # 增加了获取二级回复的内容（weibo只有两级）
+
         # 随机睡眠一下
         if max_count % 40 == 0:
-            sleep(random.randint(1, 5))
+            # sleep(random.randint(1, 5))
+            sleep(random.uniform(1, 2))
 
         cur_count += count
         max_id = data.get("max_id")

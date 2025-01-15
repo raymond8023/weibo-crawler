@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
+    <title>{{ user['昵称'] }}的微博</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="topbar">
+                <img src="/img/left.png" onclick="window.location.href='/'">
+            </div>
+            <div id="user-list">
+                <div class="card">
+                    <div class="userinfo">
+                        <div class="avatar">
+                            <img src="/img/{{ user['高清头像'].split('/')[4] }}">
+                        </div>
+                        <div class="user">
+                            <div class="name">
+                                <text>{{ user['昵称'] }}</text>
+                                {% if user['性别'] == 'm' %}
+                                    <img src="/img/male.png">
+                                {% else %}
+                                    <img src="/img/female.png">
+                                {% endif %}
+                                <div class="createtime">（注册时间：{{ user['注册时间'] }}）</div>
+                            </div>
+                            <div class="bio">
+                                <text>简介：{{ user['简介'] }}</text>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weiboinfo">
+                        <div class="weiboitem">
+                            <div class="itemnumber">{{ user['微博数'] }}</div>
+                            <div class="itemname">微博</div>
+                        </div>
+                        <div class="weiboitem">
+                            <div class="itemnumber">{{ user['关注数'] }}</div>
+                            <div class="itemname">关注</div>
+                        </div>
+                        <div class="weiboitem">
+                            <div class="itemnumber">{{ user['粉丝数'] }}</div>
+                            <div class="itemname">粉丝</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="weibo-list">
+                {% for weibo in weibos %}
+                <div class="card" onclick="window.location.href='/weibo/{{ weibo['id'] }}'">
+                    <div class="weiboheader">
+                        <div class="writer">
+                            <div class="writeravatar">
+                                <img src="/img/{{ user['高清头像'].split('/')[4] }}">
+                            </div>
+                            <div class="writeruser">
+                                <div class="writername">
+                                    <text>{{ weibo['screen_name'] }}</text>
+                                </div>
+                                <div class="origin">
+                                    <text>{{ weibo['created_at'].split(' ')[0] }} 来自 {{ weibo['source'] }}</text>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="views">
+                            <text>阅读</text>
+                        </div>
+                    </div>
+                    <div class="weibocontent">
+                        <text>{{ weibo['text'] | safe }}</text>
+                    </div>
+                    <div class="weibofooter">
+                        <div class="footeritem">
+                            <img src="/img/repost.png">
+                            <text>{{ weibo['reposts_count'] }}转发</text>
+                        </div>
+                        <div class="footeritem">
+                            <img src="/img/comment.png">
+                            <text>{{ weibo['comments_count'] }}评论</text>
+                        </div>
+                        <div class="footeritem">
+                            <img src="/img/good.png">
+                            <text>{{ weibo['attitudes_count'] }}点赞</text>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

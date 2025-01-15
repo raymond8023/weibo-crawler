@@ -1,0 +1,225 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    background-color: #f2f2f2;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+
+.container {
+    width: 100%;
+    max-width: 750px;
+    margin: 0 auto;
+    background: #fff;
+}
+
+.topbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.topbar img{
+    padding: 0.8rem;
+    cursor: pointer;
+}
+
+.topbar text {
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+}
+
+.null {
+    width: 4rem;
+}
+
+.card {
+    position: relative;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0.1rem;
+    border-left-width: 0;
+    border-color: #e6e6e6;
+    border-style: solid;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.userinfo {
+    display: flex;
+    flex-direction: row;
+    padding-left: 2rem;
+    width: 100%;
+}
+
+.avatar img {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+}
+
+.user {
+    display: flex;
+    flex-direction: column;
+    padding-left: 1.5rem;
+}
+
+.name {
+    display: flex;
+    flex-direction: row;
+    padding-top: 0.5rem;
+    align-items: center;
+}
+
+.name text {
+    font-size: 1.6rem;
+    color: #333;
+}
+
+.name img {
+    width: 1.75rem;
+    height: 1.75rem;
+}
+
+.createtime {
+    padding-left: 1rem;
+    font-size: 1rem;
+    color: #999;
+}
+
+.bio {
+    padding-top: 0.8rem;
+}
+
+.bio text {
+    font-size: 1rem;
+    color: #999;
+}
+
+.weiboinfo {
+    display: flex;
+    flex-direction: row;
+    padding-top: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+}
+
+.weiboitem {
+    flex: 1; 
+    text-align: center;
+    padding: 10px; 
+    color: #333;
+    margin: 0 10px; 
+}
+
+.weiboheader {
+    display: flex;
+    justify-content: space-between; /* 将子元素分布在两端 */
+    align-items: center; /* 垂直居中 */
+    padding: 0.5rem;
+}
+
+.writer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.writeravatar img {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+}
+
+.writeruser {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0.5rem;
+}
+
+.writername {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.writername text {
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.origin text {
+    font-size: 0.9rem;
+    color: #999;
+}
+
+.views {
+    display: flex;
+    border-radius: 0.25rem;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    width: 7rem;
+    height: 2rem;
+    box-shadow: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.2); /* 阴影效果 */
+}
+
+.views text {
+    font-size: 0.9rem;
+    color: #999
+}
+
+.weibocontent {
+    margin-top: 0.5rem;
+    cursor: auto;
+}
+
+.weibocontent text {
+    font-size: 1.25rem;
+    color: #333;
+}
+
+.weibofooter {
+    display: flex;
+    flex-direction: row;
+    align-items: center; 
+    margin-top: 1.2rem;
+}
+
+.footeritem {
+    display: flex;
+    align-items: center;
+}
+
+.footeritem img {
+    margin-right: 0.2rem;
+}
+
+.footeritem text {
+    margin-right: 2rem;
+    color: #a5aeb5;
+}
+
+.footeritem.active {
+    position: relative; /* 为伪元素定位 */
+    
+}
+
+.footeritem.active text {
+    color: #697480;
+}
+
+.footeritem.active::after {
+    content: '';
+    display: block;
+    width: 20%; /* 下划线长度 */
+    height: 0.1rem; /* 下划线厚度 */
+    background-color: #697480; /* 下划线颜色 */
+    position: absolute;
+    bottom: -0.5rem; /* 调整下划线位置，负值表示向下移动 */
+    left: 50%; /* 水平居中 */
+    transform: translateX(-50%); 
+}
+
