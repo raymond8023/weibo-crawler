@@ -223,3 +223,89 @@ body {
     transform: translateX(-50%); 
 }
 
+.contentitem {
+    display: flex;
+    flex-direction: row;
+}
+
+.contentavatar {
+    margin-right: 0.7rem;
+}
+
+.contentavatar img {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+}
+
+.contentuser {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.contentuser text {
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.content {
+    width: 100%;
+}
+
+.contenttext {
+    margin-top: 0.5rem;
+    cursor: auto;
+}
+
+.contenttext text {
+    font-size: 1.25rem;
+    color: #333;
+}
+
+.contentreply {
+    margin-top: 0.5rem;
+    padding: 0.8rem;
+    background: #f7f7f7;
+}
+
+.contentreply text {
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.replymore {
+    margin-top: 0.5rem;
+}
+
+.replymore text {
+    color: #507daf;
+}
+
+.contentfoot {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.7rem;
+}
+
+.contentfoot text {
+    font-size: 0.9rem;
+    color: #999;
+}
+
+.contentfoot img {
+    width: 1.1rem;
+    height: 1.1rem;
+}
+
+.contentlike {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.contentlike text {
+    margin: 0.2rem;
+}

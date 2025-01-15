@@ -58,8 +58,7 @@ def weibo(weibo_id):
                 cursor.execute('SELECT * FROM weibo WHERE id = ?', (weibo_id,))
                 weibo = cursor.fetchone()
                 columns = [column[0] for column in cursor.description]
-                # 将每一行数据转换为字典
-                weibo_dict = dict(zip(columns, weibo))
+                weibo_dict = dict(zip(columns, weibo))  # 将每一行数据转换为字典
     with open('../weibo/users.csv', mode='r', encoding='utf-8-sig') as file:
         reader = csv.DictReader(file)  # 使用 DictReader
         for row in reader:
@@ -72,31 +71,61 @@ def weibo(weibo_id):
     return render_template('weibo.html', user=user, weibo=weibo_dict)
 
 
-@app.route('/content/<tab>')
-def get_content(tab):
-    # 模拟从数据库或其他来源获取内容
-    if tab == 'repost':
-        return {'content': '<p>这里是转发的内容。</p>'}
-    elif tab == 'comment':
-        return {'content': '<p>这里是评论的内容。</p>'}
-    elif tab == 'good':
-        return {'content': '<p>这里是点赞的内容。</p>'}
-    else:
-        return {'content': '<p>未知标签。</p>'}, 404
-
 # 评论接口
-@app.route('/comment', methods=['GET'])
-def comment():
+@app.route('/comment/<int:weibo_id>', methods=['GET'])
+def comment(weibo_id):
     with closing(sqlite3.connect('../weibo/weibodata.db')) as conn:
         with conn:  # 使用事务
             cursor = conn.cursor()
             if request.method == 'GET':
-                # 获取所有评论
-                cursor.execute('SELECT * FROM comment')
+                # 获取评论，相同root_id前10条，created_at升序
+                sql='''SELECT *, MAX(row_num) OVER (PARTITION BY root_id) AS max_row_num FROM 
+                (SELECT *, ROW_NUMBER() OVER (PARTITION BY root_id ORDER BY created_at ASC) AS row_num
+                    FROM comments WHERE weibo_id = ?) AS ranked_comments
+                WHERE row_num <= 10;'''
+                cursor.execute(sql, (weibo_id,))
                 comments = cursor.fetchall()
-    return jsonify(comments)
+                columns = [column[0] for column in cursor.description]
+                comments_dict = [dict(zip(columns, row)) for row in comments]  # 将每一行数据转换为字典
+                i = 0
+                while i < len(comments_dict):
+                    if comments_dict[i]['id'] == comments_dict[i]['root_id']:
+                        j = i
+                        comments_dict[j]['reply'] = []
+                        i += 1
+                    else:
+                        comments_dict[j]['reply'].append(comments_dict[i])
+                        del comments_dict[i]
+    return jsonify(comments_dict)
+
+# 转发接口
+@app.route('/repost/<int:weibo_id>', methods=['GET'])
+def repost(weibo_id):
+    with closing(sqlite3.connect('../weibo/weibodata.db')) as conn:
+        with conn:  # 使用事务
+            cursor = conn.cursor()
+            if request.method == 'GET':
+                # 获取转发，相同root_id前10条，created_at升序
+                sql='''SELECT *, MAX(row_num) OVER (PARTITION BY root_id) AS max_row_num FROM 
+                (SELECT *, ROW_NUMBER() OVER (PARTITION BY root_id ORDER BY created_at ASC) AS row_num
+                    FROM comments WHERE weibo_id = ?) AS ranked_comments
+                WHERE row_num <= 10;'''
+                cursor.execute(sql, (weibo_id,))
+                comments = cursor.fetchall()
+                columns = [column[0] for column in cursor.description]
+                comments_dict = [dict(zip(columns, row)) for row in comments]  # 将每一行数据转换为字典
+                i = 0
+                while i < len(comments_dict):
+                    if comments_dict[i]['id'] == comments_dict[i]['root_id']:
+                        j = i
+                        comments_dict[j]['reply'] = []
+                        i += 1
+                    else:
+                        comments_dict[j]['reply'].append(comments_dict[i])
+                        del comments_dict[i]
+    return jsonify(comments_dict)
 
 # 启动服务器
 if __name__ == '__main__':
-    # app.run(host='localhost', port=80)
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='localhost', port=80)
+    # app.run(host='0.0.0.0', port=80)

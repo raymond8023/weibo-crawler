@@ -10,56 +10,51 @@
 
 <body>
     <div class="container">
-        <div class="header">
-            <div class="topbar">
-                <img src="/img/left.png" onclick="history.back()">
-                <text>微博正文</text>
-                <div class="null"></div>
-            </div>
-            <div id="weibo-list">
-                <div class="card">
-                    <div class="weiboheader" onclick="window.location.href='/profile/{{ user['用户id'] }}'">
-                        <div class="writer">
-                            <div class="writeravatar">
-                                <img src="/img/{{ user['高清头像'].split('/')[4] }}">
+        <div class="topbar">
+            <img src="/img/left.png" onclick="history.back()">
+            <text>微博正文</text>
+            <div class="null"></div>
+        </div>
+        <div id="weibo-list">
+            <div class="card">
+                <div class="weiboheader" onclick="window.location.href='/profile/{{ user['用户id'] }}'">
+                    <div class="writer">
+                        <div class="writeravatar">
+                            <img src="/img/{{ user['高清头像'].split('/')[4] }}">
+                        </div>
+                        <div class="writeruser">
+                            <div class="writername">
+                                <text>{{ weibo['screen_name'] }}</text>
                             </div>
-                            <div class="writeruser">
-                                <div class="writername">
-                                    <text>{{ weibo['screen_name'] }}</text>
-                                </div>
-                                <div class="origin">
-                                    <text>{{ weibo['created_at'].split(' ')[0] }} 来自 {{ weibo['source'] }}</text>
-                                </div>
+                            <div class="origin">
+                                <text>{{ weibo['created_at'].split(' ')[0] }} 来自 {{ weibo['source'] }}</text>
                             </div>
                         </div>
-                        <div class="views">
-                            <text>阅读</text>
-                        </div>
                     </div>
-                    <div class="weibocontent">
-                        <text>{{ weibo['text'] | safe }}</text>
-                    </div>
-                    <div class="weibofooter">
-                        <div class="footeritem" data-tab="repost">
-                            <img src="/img/repost.png">
-                            <text>转发{{ weibo['reposts_count'] }}</text>
-                        </div>
-                        <div class="footeritem" data-tab="comment">
-                            <img src="/img/comment.png">
-                            <text>评论{{ weibo['comments_count'] }}</text>
-                        </div>
-                        <div class="footeritem" data-tab="good">
-                            <img src="/img/good.png">
-                            <text>点赞{{ weibo['attitudes_count'] }}</text>
-                        </div>
+                    <div class="views">
+                        <text>阅读</text>
                     </div>
                 </div>
-                <div class="card">
-                    <div id="content-container">
-                        <!-- 内容区域 -->
+                <div class="weibocontent">
+                    <text>{{ weibo['text'] | safe }}</text>
+                </div>
+                <div class="weibofooter">
+                    <div class="footeritem" data-action="repost" data-weiboid="{{ weibo['id'] }}">
+                        <img src="/img/repost.png">
+                        <text>转发{{ weibo['reposts_count'] }}</text>
+                    </div>
+                    <div class="footeritem" data-action="comment" data-weiboid="{{ weibo['id'] }}">
+                        <img src="/img/comment.png">
+                        <text>评论{{ weibo['comments_count'] }}</text>
+                    </div>
+                    <div class="footeritem" data-action="good">
+                        <img src="/img/good.png">
+                        <text>点赞{{ weibo['attitudes_count'] }}</text>
                     </div>
                 </div>
             </div>
+        </div>
+        <div id="content-container">
         </div>
     </div>
     <script src="/script.js"></script>
