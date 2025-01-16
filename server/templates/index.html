@@ -10,46 +10,44 @@
 
 <body>
     <div class="container">
-        <div class="header">
-            <div id="user-list">
-                {% for user in users %}
-                <div class="card" onclick="window.location.href='/profile/{{ user['用户id'] }}'">
-                    <div class="userinfo">
-                        <div class="avatar">
-                            <img src="/img/{{ user['高清头像'].split('/')[4] }}">
-                        </div>
-                        <div class="user">
-                            <div class="name">
-                                <text>{{ user['昵称'] }}</text>
-                                {% if user['性别'] == 'm' %}
-                                    <img src="/img/male.png">
-                                {% else %}
-                                    <img src="/img/female.png">
-                                {% endif %}
-                                <div class="createtime">（注册时间：{{ user['注册时间'] }}）</div>
-                            </div>
-                            <div class="bio">
-                                <text>简介：{{ user['简介'] }}</text>
-                            </div>
-                        </div>
+        <div id="user-list">
+            {% for user in users %}
+            <div class="card" onclick="window.location.href='/profile/{{ user['用户id'] }}'">
+                <div class="userinfo">
+                    <div class="avatar">
+                        <img src="{{ user['高清头像'] }}">
                     </div>
-                    <div class="weiboinfo">
-                        <div class="weiboitem">
-                            <div class="itemnumber">{{ user['微博数'] }}</div>
-                            <div class="itemname">微博</div>
+                    <div class="user">
+                        <div class="name">
+                            <text>{{ user['昵称'] }}</text>
+                            {% if user['性别'] == 'm' %}
+                                <img src="/img/male.png">
+                            {% else %}
+                                <img src="/img/female.png">
+                            {% endif %}
+                            <div class="createtime">（注册时间：{{ user['注册时间'] }}）</div>
                         </div>
-                        <div class="weiboitem">
-                            <div class="itemnumber">{{ user['关注数'] }}</div>
-                            <div class="itemname">关注</div>
-                        </div>
-                        <div class="weiboitem">
-                            <div class="itemnumber">{{ user['粉丝数'] }}</div>
-                            <div class="itemname">粉丝</div>
+                        <div class="bio">
+                            <text>简介：{{ user['简介'] }}</text>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
+                <div class="weiboinfo">
+                    <div class="weiboitem">
+                        <div class="itemnumber">{{ user['微博数'] }}</div>
+                        <div class="itemname">微博</div>
+                    </div>
+                    <div class="weiboitem">
+                        <div class="itemnumber">{{ user['关注数'] }}</div>
+                        <div class="itemname">关注</div>
+                    </div>
+                    <div class="weiboitem">
+                        <div class="itemnumber">{{ user['粉丝数'] }}</div>
+                        <div class="itemname">粉丝</div>
+                    </div>
+                </div>
             </div>
+            {% endfor %}
         </div>
     </div>
 </body>

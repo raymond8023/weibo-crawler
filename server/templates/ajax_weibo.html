@@ -1,0 +1,39 @@
+            {% for weibo in weibos %}
+            <div class="card" onclick="window.location.href='/weibo/{{ weibo['id'] }}'">
+                <div class="weiboheader">
+                    <div class="writer">
+                        <div class="writeravatar">
+                            <img src="{{ user['头像'] }}">
+                        </div>
+                        <div class="writeruser">
+                            <div class="writername">
+                                <text>{{ weibo['screen_name'] }}</text>
+                            </div>
+                            <div class="origin">
+                                <text>{{ weibo['created_at'].split(' ')[0] }} 来自 {{ weibo['source'] }}</text>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="views">
+                        <text>阅读</text>
+                    </div>
+                </div>
+                <div class="weibocontent">
+                    <text>{{ weibo['text'] | safe }}</text>
+                </div>
+                <div class="weibofooter">
+                    <div class="footeritem">
+                        <img src="/img/repost.png">
+                        <text>{{ weibo['reposts_count'] }}转发</text>
+                    </div>
+                    <div class="footeritem">
+                        <img src="/img/comment.png">
+                        <text>{{ weibo['comments_count'] }}评论</text>
+                    </div>
+                    <div class="footeritem">
+                        <img src="/img/good.png">
+                        <text>{{ weibo['attitudes_count'] }}点赞</text>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
