@@ -17,10 +17,10 @@
         </div>
         <div id="weibo-list">
             <div class="card">
-                <div class="weiboheader" onclick="window.location.href='/profile/{{ user['用户id'] }}'">
+                <div class="weiboheader">
                     <div class="writer">
                         <div class="writeravatar">
-                            <img src="/img/{{ user['高清头像'].split('/')[4] }}">
+                            <img src="{{ user['头像'] }}">
                         </div>
                         <div class="writeruser">
                             <div class="writername">
@@ -39,11 +39,11 @@
                     <text>{{ weibo['text'] | safe }}</text>
                 </div>
                 <div class="weibofooter">
-                    <div class="footeritem" data-action="repost" data-weiboid="{{ weibo['id'] }}">
+                    <div class="footeritem" data-action="repost">
                         <img src="/img/repost.png">
                         <text>转发{{ weibo['reposts_count'] }}</text>
                     </div>
-                    <div class="footeritem" data-action="comment" data-weiboid="{{ weibo['id'] }}">
+                    <div class="footeritem" data-action="comment">
                         <img src="/img/comment.png">
                         <text>评论{{ weibo['comments_count'] }}</text>
                     </div>
@@ -54,10 +54,109 @@
                 </div>
             </div>
         </div>
-        <div id="content-container">
+        <div id="repost-container" style="display: none">
+            {% for repost in reposts %}
+            <div class="card">
+                <div class="contentitem">
+                    <div class="contentavatar">
+                        <img src="{{ repost['user_avatar_url'] }}">
+                    </div>
+                    <div class="content">
+                        <div class="contentuser">
+                            <text>{{ repost['user_screen_name'] }}</text>
+                        </div>
+                        <div class="contenttext">
+                            <text>{{ repost['text'] | safe }}</text>
+                        </div>
+                        <div class="contentfoot">
+                            <div class="contenttime">
+                                <text>{{ repost['created_at'] }}</text>
+                            </div>
+                            <div class="contentlike">
+                                <img src="/img/good.png">
+                                <text>{{ repost['like_count'] }}</text>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div id="comment-container" style="display: block">
+            {% for comment in comments %}
+            <div class="card">
+                <div class="contentitem">
+                    <div class="contentavatar">
+                        <img src="{{ comment['user_avatar_url'] }}">
+                    </div>
+                    <div class="content">
+                        <div class="contentuser">
+                            <text>{{ comment['user_screen_name'] }}</text>
+                        </div>
+                        <div class="contenttext">
+                            <text>{{ comment['text'] | safe }}</text>
+                        </div>
+                        {% if comment['reply'] %}
+                            <div class="contentreply">
+                                {% for reply in comment['reply'] %}
+                                    <div class="relpyitem">
+                                        <text>
+                                            {% if reply['text'] and reply['text'].startswith("回复<a href=") %}
+                                                {{ reply['user_screen_name'] }}{{ reply['text'] | safe }}
+                                            {% else %}
+                                                {{ reply['user_screen_name'] }}:{{ reply['text'] | safe }}
+                                            {% endif %}
+                                        </text>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="contentfoot">
+                            <div class="contenttime">
+                                <text>{{ comment['created_at'] }}</text>
+                            </div>
+                            <div class="contentlike">
+                                <img src="/img/good.png">
+                                <text>{{ comment['like_count'] }}</text>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div id="like-container" style="display: none">
         </div>
     </div>
-    <script src="/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabDivs = document.querySelectorAll('.footeritem');
+            const repostContainer = document.getElementById('repost-container');
+            const commentContainer = document.getElementById('comment-container');
+            const likeContainer = document.getElementById('like-container');
+
+            // 初始化第一个标签为选中状态
+            tabDivs[1].classList.add('active');
+
+            tabDivs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabDivs.forEach(tab => tab.classList.remove('active'));
+                    this.classList.add('active');
+                    repostContainer.style.display = 'none';
+                    commentContainer.style.display = 'none';
+                    likeContainer.style.display = 'none';
+                    const tabAction = this.getAttribute('data-action');
+                    if(tabAction == 'repost'){
+                        repostContainer.style.display = 'block';
+                    }else if(tabAction == 'comment'){
+                        commentContainer.style.display = 'block';
+                    }else if(tabAction == 'like'){
+                        likeContainer.style.display = 'block';
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

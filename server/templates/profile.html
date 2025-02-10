@@ -12,6 +12,10 @@
     <div class="container">
         <div class="topbar">
             <img src="/img/left.png" onclick="window.location.href='/'">
+            <div class="searchform">
+                <img src="/img/search.png">
+                <input type="search" placeholder="搜我的微博">
+            </div>
         </div>
         <div id="user-list">
             <div class="card">
@@ -51,52 +55,72 @@
             </div>
         </div>
         <div id="weibo-list">
-            {% for weibo in weibos %}
-            <div class="card" onclick="window.location.href='/weibo/{{ weibo['id'] }}'">
-                <div class="weiboheader">
-                    <div class="writer">
-                        <div class="writeravatar">
-                            <img src="{{ user['头像'] }}">
-                        </div>
-                        <div class="writeruser">
-                            <div class="writername">
-                                <text>{{ weibo['screen_name'] }}</text>
-                            </div>
-                            <div class="origin">
-                                <text>{{ weibo['created_at'].split(' ')[0] }} 来自 {{ weibo['source'] }}</text>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="views">
-                        <text>阅读</text>
-                    </div>
-                </div>
-                <div class="weibocontent">
-                    <text>{{ weibo['text'] | safe }}</text>
-                </div>
-                <div class="weibofooter">
-                    <div class="footeritem">
-                        <img src="/img/repost.png">
-                        <text>{{ weibo['reposts_count'] }}转发</text>
-                    </div>
-                    <div class="footeritem">
-                        <img src="/img/comment.png">
-                        <text>{{ weibo['comments_count'] }}评论</text>
-                    </div>
-                    <div class="footeritem">
-                        <img src="/img/good.png">
-                        <text>{{ weibo['attitudes_count'] }}点赞</text>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
         </div>
-        <div class="card">
+        <div class="card" id="nomoredata" style="display: none;">
             <div class="showall">
-                <text onclick="window.location.href='/ajax/{{ user['用户id'] }}'">查看全部微博</text>
+                <text>没有更多数据</text>
             </div>
         </div>
     </div>
+    <script>
+        let isLoading = false; // 是否正在加载数据
+        let page = 0; // 当前页码
+        let hasMoreData = true; // 是否还有更多数据
+        let weiboList, nomoredataElement, timer;
+
+        // 监听 DOMContentLoaded 事件，确保 DOM 加载完成后执行
+        document.addEventListener("DOMContentLoaded", function () {
+            weiboList = document.getElementById("weibo-list");
+            nomoredataElement = document.getElementById('nomoredata');
+            loadMoreData();
+        });
+
+        // 监听滚动事件
+        window.addEventListener('scroll', () => {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+                if (scrollTop + clientHeight >= scrollHeight - 100) {
+                    loadMoreData();
+                }
+            }, 20); // 200ms 防抖
+        });
+
+        // 加载更多数据
+        function loadMoreData(){
+            if (isLoading || !hasMoreData) return; // 如果正在加载，则退出
+            isLoading = true;
+
+            // AJAX 请求, 调用 fetch 接口获取数据
+            fetch(`/profile/{{ user['用户id'] }}?page=${page}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("网络响应异常");
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    if (data.trim() === "") {
+                        // 如果没有更多数据
+                        hasMoreData = false; // 标记为没有更多数据
+                        nomoredataElement.style.display = 'block'; // 显示提示
+                    }
+                    else {
+                        // 将获取的数据显示在页面上
+                        weiboList.innerHTML += data; // 格式化显示数据
+                    }
+                })
+                .catch(error => {
+                    // 处理错误
+                    console.error("获取数据失败:", error);
+                    weiboList.textContent = "数据加载失败，请稍后重试。";
+                });
+
+            // 更新页码
+            page++;
+            isLoading = false;
+        }
+    </script>
 </body>
 
 </html>

@@ -298,6 +298,7 @@ class Weibo(object):
 
         while retries < max_retries:
             try:
+                print(url)
                 response = requests.get(url, params=params, headers=self.headers, timeout=10)
                 response.raise_for_status()  # 如果响应状态码不是 200，会抛出 HTTPError
                 js = response.json()
@@ -437,21 +438,21 @@ class Weibo(object):
         """获取用户信息"""
         params = {"containerid": "100505" + str(self.user_config["user_id"])}
         url = "https://m.weibo.cn/api/container/getIndex"
-        
+
         # 这里在读取下一个用户的时候很容易被ban，需要优化休眠时长
         # 加一个count，不需要一上来啥都没干就sleep
         if self.long_sleep_count_before_each_user > 0:
             sleep_time = random.randint(30, 60)
             # 添加log，否则一般用户不知道以为程序卡了
-            logger.info(f"""短暂sleep {sleep_time}秒，避免被ban""")        
+            logger.info(f"""短暂sleep {sleep_time}秒，避免被ban""")
             sleep(sleep_time)
-            logger.info("sleep结束")  
-        self.long_sleep_count_before_each_user = self.long_sleep_count_before_each_user + 1      
+            logger.info("sleep结束")
+        self.long_sleep_count_before_each_user = self.long_sleep_count_before_each_user + 1
 
         max_retries = 5  # 设置最大重试次数，避免无限循环
         retries = 0
         backoff_factor = 5  # 指数退避的基数（秒）
-        
+
         while retries < max_retries:
             try:
                 response = requests.get(url, params=params, headers=self.headers, timeout=10)
@@ -599,6 +600,7 @@ class Weibo(object):
     def download_one_file(self, url, file_path, type, weibo_id):
         """下载单个文件(图片/视频)"""
         try:
+            print(f"download{weibo_id}:{url}")
 
             file_exist = os.path.isfile(file_path)
             need_download = (not file_exist)

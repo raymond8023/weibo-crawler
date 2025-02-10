@@ -1,22 +1,22 @@
 {
-    "user_id_list": "user_id_list.txt",
+    "user_id_list": ["1434712204"],
     "only_crawl_original": 0,
-    "since_date": 1,
+    "since_date": "2024-11-01",
     "start_page": 1,
     "write_mode": [
-        "csv"
+        "sqlite"
     ],
     "original_pic_download": 1,
-    "retweet_pic_download": 0,
+    "retweet_pic_download": 1,
     "original_video_download": 1,
-    "retweet_video_download": 0,
+    "retweet_video_download": 1,
     "download_comment": 1,
-    "comment_max_download_count": 100,
+    "comment_max_download_count": 1000,
     "download_repost": 1,
-    "repost_max_download_count": 100,
+    "repost_max_download_count": 1000,
     "user_id_as_folder_name": 0,
-    "remove_html_tag": 1,
-    "cookie": "your cookie",
+    "remove_html_tag": 0,
+    "cookie": "SUB=_2A25KeKK2DeRhGedK6FYW8SzOyziIHXVp97p-rDV6PUJbktAbLW_fkW1NJr3lqRjidFt0c71WipXmH6oso6g-gqpI; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WFOm4PU3PNpz4jdi16UPV4u5JpX5KzhUgL.Fo2Xe0BNeKzEehB2dJLoIpjLxKqL1--L1-2LxKqLBK-L1-2LxKqL1-zLBKqt; SSOLoginState=1736233702; ALF=1738825702; _T_WM=85947730193; MLOGIN=1; M_WEIBOCN_PARAMS=luicode%3D20000174",
     "mysql_config": {
         "host": "localhost",
         "port": 3306,
